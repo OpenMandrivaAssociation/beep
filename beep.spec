@@ -7,7 +7,6 @@ Group:		Sound
 URL:		http://www.johnath.com/beep/
 Source0:	http://www.johnath.com/beep/%{name}-%{version}.tar.bz2
 Patch0:		beep_1.2.2-17.diff
-BuildRoot:	%{_tmppath}/%{name}-buildroot
 
 %description
 Beep allows the user to control the pc-speaker with precision,
