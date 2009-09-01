@@ -1,7 +1,7 @@
 Summary:	Beep the pc speaker any number of ways
 Name:		beep
 Version:	1.2.2
-Release:	%mkrel 9
+Release:	%mkrel 10
 License:	GPL
 Group:		Sound
 URL:		http://www.johnath.com/beep/
