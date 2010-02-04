@@ -1,4 +1,4 @@
-Summary:	Beep the pc speaker any number of ways
+Summary:	The pc speaker
 Name:		beep
 Version:	1.2.2
 Release:	%mkrel 11
