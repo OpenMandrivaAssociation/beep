@@ -1,12 +1,11 @@
 Summary:	The pc speaker
 Name:		beep
-Version:	1.2.2
-Release:	%mkrel 11
+Version:	1.3
+Release:	%mkrel 1
 License:	GPLv2
 Group:		Sound
 URL:		http://www.johnath.com/beep/
-Source0:	http://www.johnath.com/beep/%{name}-%{version}.tar.bz2
-Patch0:		beep_1.2.2-17.diff
+Source0:	http://www.johnath.com/beep/%{name}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 
 %description
@@ -18,16 +17,13 @@ something interesting occurs. Of course, it has no notion of
 what's interesting, but it's real good at that notifying part.
 
 %prep
-
 %setup -q
-%patch0 -p1
 
 %build
-
 gcc %{optflags} -Wall -o beep beep.c
 
 %install
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 mkdir -p %{buildroot}/%{_bindir}
 mkdir -p %{buildroot}/%{_mandir}/man1
@@ -36,7 +32,7 @@ gunzip beep.1.gz
 install -m 644 beep.1 %{buildroot}%{_mandir}/man1/
 
 %clean
-[ "%{buildroot}" != "/" ] && rm -rf %{buildroot}
+rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root)
