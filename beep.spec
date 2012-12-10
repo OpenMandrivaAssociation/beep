@@ -41,3 +41,46 @@ rm -rf %{buildroot}
 %{_mandir}/man1/*
 
 
+
+
+%changelog
+* Tue Aug 17 2010 Sandro Cazzaniga <kharec@mandriva.org> 1.3-1mdv2011.0
++ Revision: 570825
+- remove p0, previous applied
+- new version
+
+* Thu Feb 04 2010 Sandro Cazzaniga <kharec@mandriva.org> 1.2.2-11mdv2010.1
++ Revision: 500663
+- Fix summary for this warning
+  beep.i586: W: name-repeated-in-summary C Beep
+- fix licence
+
+* Tue Sep 01 2009 Thierry Vignaud <tv@mandriva.org> 1.2.2-10mdv2010.0
++ Revision: 424031
+- rebuild
+
+* Wed Jul 23 2008 Thierry Vignaud <tv@mandriva.org> 1.2.2-9mdv2009.0
++ Revision: 243211
+- rebuild
+
+* Thu Dec 20 2007 Olivier Blin <oblin@mandriva.com> 1.2.2-7mdv2008.1
++ Revision: 135828
+- restore BuildRoot
+
+  + Thierry Vignaud <tv@mandriva.org>
+    - kill re-definition of %%buildroot on Pixel's request
+
+
+* Fri Dec 22 2006 Oden Eriksson <oeriksson@mandriva.com> 1.2.2-7mdv2007.0
++ Revision: 101615
+- Import beep
+
+* Tue Jun 27 2006 Oden Eriksson <oeriksson@mandriva.com> 1.2.2-7mdv2007.0
+- added one patch by debian
+
+* Sat May 14 2005 Oden Eriksson <oeriksson@mandriva.com> 1.2.2-6mdk
+- rebuild
+
+* Thu Apr 08 2004 Michael Scherer <misc@mandrake.org> 1.2.2-5mdk 
+- Build release
+
