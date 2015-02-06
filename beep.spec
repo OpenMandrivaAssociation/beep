@@ -1,7 +1,7 @@
 Summary:	The pc speaker
 Name:		beep
 Version:	1.3
-Release:	%mkrel 1
+Release:	2
 License:	GPLv2
 Group:		Sound
 URL:		http://www.johnath.com/beep/
