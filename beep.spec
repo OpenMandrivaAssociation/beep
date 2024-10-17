@@ -4,7 +4,7 @@ Version:	1.3
 Release:	2
 License:	GPLv2
 Group:		Sound
-URL:		http://www.johnath.com/beep/
+URL:		https://www.johnath.com/beep/
 Source0:	http://www.johnath.com/beep/%{name}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-buildroot
 
