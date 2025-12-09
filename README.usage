@@ -1,0 +1,86 @@
+Content
+=======
+
+  1. Load the pkspkr.ko Kernel Driver Module (required)
+  2. Add non-root users to the "beep" group
+  3. Avoid using `beep`
+  4. Example Usage
+
+
+1. Load the pcspkr.ko Kernel Driver Module (required)
+-----------------------------------------------------
+To have a working PC speaker beep, you must firstly load the kernel driver module
+`pcspkr.ko`.
+
+The Rosa package installation enables the auto-loading of the above module when
+an authorized user (see below: §2) run the "beep" excecutable.
+You can then check whether pcspkr.ko is loaded by running
+    [root@host ~]# lsmod | grep pcspkr
+as root.
+
+When pcspkr is loaded, you can run
+    [root@host ~]# beep
+as root and verify that you hear the beep coming from the PC speaker.
+
+
+You can always load the module manually as root as follows:
+    [root@host ~]# modprobe pcspkr
+If you want the system to automatically load the pcspkr driver the
+next time it boots, uncomment the
+    alias platform:pcspkr pcspkr
+line in the `/etc/modprobe.d/beep.conf` config file and remove the file `beep.conf`
+from `/etc/modules-load.d/`.
+
+
+2. Add non-root users to the "beep" group
+-----------------------------------------
+For more information on permission setup, please consult the PERMISSIONS.md file,
+found in /usr/share/doc/beep/.
+
+To add user `jane` to the `beep` group, to allow her to run the beep executable
+have root run
+    [root@host ~]# usermod jane -a -G beep
+
+You can check which users are members of the `beep` group by running
+    [user@host ~]$ getent group beep
+    beep:x:951:jane,bill
+    [user@host ~]$
+
+However, any user newly added to the `beep` group must re-login so
+their processes can pick up the group membership. A user can check
+their group membership as follows:
+    [jane@host ~]$ id
+    uid=1000(jane) gid=1000(jane) groups=1000(jane),10(wheel),951(beep) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+    [jane@host ~]$
+
+To check the permission of the PC speaker device file, run
+    [user@host ~]$ ls -lH /dev/input/by-path/platform-pcspkr-event-spkr
+    crw-rw----+ 1 root input 13, 85 29. Dez 02:52 /dev/input/by-path/platform-pcspkr-event-spkr
+    [user@host ~]$ getfacl /dev/input/by-path/platform-pcspkr-event-spkr
+    getfacl: Removing leading '/' from absolute path names
+    # file: dev/input/by-path/platform-pcspkr-event-spkr
+    # owner: root
+    # group: input
+    user::rw-
+    group:beep:-w-
+    group::rw-
+    mask::rw-
+    other::---
+
+
+3. Avoid using `beep`
+---------------------
+Modern desktop systems with the freedesktop.org suite of middleware (systemd
+user sessions, pulseaudio audio routing, etc.) will probably not be set up to
+allow use of the sound infrastructure for users other than the user currently
+logged into the current virtual console: those users will not be able to use 
+`beep`.
+
+
+4. Example Usage
+----------------
+An acoustic notification when a long running compile job finishes (whether the
+build was successful or not) could be done with
+    [jane@host ~/src/foobar]$ ./configure --prefix=$HOME/.local && make && make check && make install; beep
+or
+    [bill@host ~/rpms/foobar]$ fedpkg mockbuild; beep

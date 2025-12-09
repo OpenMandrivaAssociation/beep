@@ -1,0 +1,11 @@
+diff -rupN beep-1.4.12.old/GNUmakefile beep-1.4.12/GNUmakefile
+--- beep-1.4.12.old/GNUmakefile	2022-01-28 22:50:48.000000000 +0100
++++ beep-1.4.12/GNUmakefile	2025-11-23 20:11:05.955757258 +0100
+@@ -155,7 +155,6 @@ $(eval $(call CHECK_CFLAGS,common_CFLAGS
+ $(eval $(call CHECK_CFLAGS,common_CFLAGS,-Wall))
+ $(eval $(call CHECK_CFLAGS,common_CFLAGS,-Wextra))
+ $(eval $(call CHECK_CFLAGS,common_CFLAGS,-Weverything))
+-$(eval $(call CHECK_CFLAGS,common_CFLAGS,-Werror))
+ $(eval $(call CHECK_CFLAGS,common_CFLAGS,-Wno-padded))
+ $(eval $(call CHECK_CFLAGS,common_CFLAGS,-Werror=format-security))
+ $(eval $(call CHECK_CFLAGS,common_CFLAGS,-Wno-disabled-macro-expansion))

@@ -1,0 +1,45 @@
+diff -rupN beep-1.4.12.old/beep-main.c beep-1.4.12/beep-main.c
+--- beep-1.4.12.old/beep-main.c	2022-01-28 22:50:48.000000000 +0100
++++ beep-1.4.12/beep-main.c	2022-12-26 19:11:04.092021344 +0100
+@@ -124,9 +124,9 @@ volatile sig_atomic_t global_abort = fal
+ 
+ 
+ /**
+- * Signal handler for signals like SIGINT and SIGTERM.
++ * Signal handler for signals like SIGHUP, SIGINT and SIGTERM.
+  *
+- * If we get interrupted, it would be nice to not leave the speaker
++ * If we get terminated in any way, it would be nice to not leave the speaker
+  * beeping in perpetuity.
+  *
+  * Everything called from this signal handler must be thread-safe,
+@@ -143,14 +143,14 @@ volatile sig_atomic_t global_abort = fal
+  *   * strerror_r(3): MT-safe
+  *   * strlen(3):     MT-safe
+  *
+- * Just setting a global flag is MT-safe.
++ * Just setting a global flag of type sig_atomic_t is MT-safe.
+  *
+  * @param unused_signum The signal number being handled. Unused.
+  */
+ 
+-void handle_signal(int unused_signum UNUSED_PARAM);
++void handle_signal_global_abort(int unused_signum UNUSED_PARAM);
+ 
+-void handle_signal(int unused_signum UNUSED_PARAM)
++void handle_signal_global_abort(int unused_signum UNUSED_PARAM)
+ {
+     global_abort = true;
+ }
+@@ -550,8 +550,9 @@ int main(const int argc, char *const arg
+      * later, there is no need to install the signal handlers any
+      * earlier.
+      */
+-    signal(SIGINT,  handle_signal);
+-    signal(SIGTERM, handle_signal);
++	signal(SIGHUP,  handle_signal_global_abort);
++    signal(SIGINT,  handle_signal_global_abort);
++    signal(SIGTERM, handle_signal_global_abort);
+ 
+     /* This outermost while loop handles the possibility that -n/--new
+      * has been used, i.e. that we have a sequence of multiple beeps

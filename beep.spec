@@ -1,86 +1,79 @@
-Summary:	The pc speaker
+Summary:	Beep the PC speaker any number of ways
 Name:		beep
-Version:	1.3
-Release:	2
-License:	GPLv2
+Version:	1.4.12
+Release:	1
+License:	GPLv2+
 Group:		Sound
-URL:		https://www.johnath.com/beep/
-Source0:	http://www.johnath.com/beep/%{name}-%{version}.tar.gz
-BuildRoot:	%{_tmppath}/%{name}-buildroot
+# Old stuff: http://www.johnath.com/beep/ - Use a more recent fork
+Url:		https://github.com/spkr-beep/beep/
+Source0:	https://github.com/spkr-beep/beep/archive/%{name}-%{version}.tar.gz
+Source1:	70-pcspkr-beep.rules
+Source2:	90-pcspkr-beep.rules
+Source3:	pcspkr-beep.conf
+Source4:	beep.sysusers.conf
+Source5:	README.usage
+Patch0:	beep-1.4.12-add-SIGHUP-handling.patch
+Patch1:	beep-1.4.12-drop-Werror.patch
+BuildRequires:	kernel-headers
+#BuildRequires:	systemd-units
+#BuildRequires:	ubsan-devel
+# For /etc/modprobe.conf.d
+#Requires:	kmod-compat
+Requires(pre):	rpm-helper
+Requires(pre):	systemd
 
 %description
-Beep allows the user to control the pc-speaker with precision,
-allowing different sounds to indicate different events. While it
-can be run quite happily on the commandline, it's intended place
-of residence is within shell/perl scripts, notifying the user when
-something interesting occurs. Of course, it has no notion of
-what's interesting, but it's real good at that notifying part.
-
-%prep
-%setup -q
-
-%build
-gcc %{optflags} -Wall -o beep beep.c
-
-%install
-rm -rf %{buildroot}
-
-mkdir -p %{buildroot}/%{_bindir}
-mkdir -p %{buildroot}/%{_mandir}/man1
-install -m 755 beep %{buildroot}/%{_bindir}/
-gunzip beep.1.gz
-install -m 644 beep.1 %{buildroot}%{_mandir}/man1/
-
-%clean
-rm -rf %{buildroot}
+Beep allows the user to control the PC speaker with precision, allowing
+different sounds to indicate different events. While it can be run quite
+happily on the command line, it's intended place of residence is within
+shell/Perl scripts, notifying the user when something interesting occurs.
+Of course, it has no notion of what's interesting, but it's real good at the
+notifying part.
 
 %files
-%defattr(-,root,root)
-%doc CHANGELOG COPYING CREDITS README
-%{_bindir}/*
-%{_mandir}/man1/*
+%doc COPYING CREDITS.md NEWS.md README.md PERMISSIONS.md
+%doc README.usage
+%config(noreplace) %{_sysconfdir}/modprobe.d/%{name}.conf
+%config(noreplace) %{_sysconfdir}/modules-load.d/%{name}.conf
+%{_udevrulesdir}/70-pcspkr-%{name}.rules
+%{_udevrulesdir}/90-pcspkr-%{name}.rules
+%{_sysusersdir}/%{name}.conf
+%{_bindir}/%{name}
+%{_mandir}/man1/%{name}.1*
+%{_docdir}/%{name}/contrib/*
+
+%pre
+%sysusers_create_package %{name} %{SOURCE4}
+
+#-----------------------------------------------------------------------------
+
+%prep
+%autosetup -p1
+
+install -m 0644 %{SOURCE5} .
 
 
+%build
+%make_build prefix="%{_prefix}" COMPILERS=clang CFLAGS_clang="%{optflags}" LDFLAGS="%{ldflags}" CPPFLAGS_clang="%{optflags}"
 
 
-%changelog
-* Tue Aug 17 2010 Sandro Cazzaniga <kharec@mandriva.org> 1.3-1mdv2011.0
-+ Revision: 570825
-- remove p0, previous applied
-- new version
+%install
+%make_install prefix="%{_prefix}" COMPILERS=clang CFLAGS_clang="%{optflags}" LDFLAGS="%{ldflags}" CPPFLAGS_clang="%{optflags}"
 
-* Thu Feb 04 2010 Sandro Cazzaniga <kharec@mandriva.org> 1.2.2-11mdv2010.1
-+ Revision: 500663
-- Fix summary for this warning
-  beep.i586: W: name-repeated-in-summary C Beep
-- fix licence
+# 1. Prepare the needed dirs
+mkdir -p %{buildroot}%{_sysconfdir}/modprobe.d/
+mkdir -p %{buildroot}%{_sysconfdir}/modules-load.d
+mkdir -p %{buildroot}%{_udevrulesdir}/
+mkdir -p %{buildroot}%{_sysusersdir}/
 
-* Tue Sep 01 2009 Thierry Vignaud <tv@mandriva.org> 1.2.2-10mdv2010.0
-+ Revision: 424031
-- rebuild
+# 2. Install our stuff
+install -m 644 %{SOURCE1} %{buildroot}%{_udevrulesdir}/
+install -m 644 %{SOURCE2} %{buildroot}%{_udevrulesdir}/
+install -m 644 %{SOURCE3} %{buildroot}%{_sysconfdir}/modprobe.d/%{name}.conf
+install -m 644 %{SOURCE4} %{buildroot}%{_sysusersdir}/%{name}.conf
 
-* Wed Jul 23 2008 Thierry Vignaud <tv@mandriva.org> 1.2.2-9mdv2009.0
-+ Revision: 243211
-- rebuild
+# To allow loading pcspkr module on-demand
+echo "pcspkr" > %{buildroot}%{_sysconfdir}/modules-load.d/%{name}.conf
 
-* Thu Dec 20 2007 Olivier Blin <oblin@mandriva.com> 1.2.2-7mdv2008.1
-+ Revision: 135828
-- restore BuildRoot
-
-  + Thierry Vignaud <tv@mandriva.org>
-    - kill re-definition of %%buildroot on Pixel's request
-
-
-* Fri Dec 22 2006 Oden Eriksson <oeriksson@mandriva.com> 1.2.2-7mdv2007.0
-+ Revision: 101615
-- Import beep
-
-* Tue Jun 27 2006 Oden Eriksson <oeriksson@mandriva.com> 1.2.2-7mdv2007.0
-- added one patch by debian
-
-* Sat May 14 2005 Oden Eriksson <oeriksson@mandriva.com> 1.2.2-6mdk
-- rebuild
-
-* Thu Apr 08 2004 Michael Scherer <misc@mandrake.org> 1.2.2-5mdk 
-- Build release
-
+# Drop what we already pick up with our %%doc macro
+rm -f  %{buildroot}%{_docdir}/%{name}/{CREDITS,NEWS}.md
