@@ -14,11 +14,8 @@ Source4:	beep.sysusers.conf
 Source5:	README.usage
 Patch0:	beep-1.4.12-add-SIGHUP-handling.patch
 Patch1:	beep-1.4.12-drop-Werror.patch
+BuildSystem:	autotools
 BuildRequires:	kernel-headers
-#BuildRequires:	systemd-units
-#BuildRequires:	ubsan-devel
-# For /etc/modprobe.conf.d
-#Requires:	kmod-compat
 Requires(pre):	rpm-helper
 Requires(pre):	systemd
 
