@@ -14,7 +14,7 @@ Source4:	beep.sysusers.conf
 Source5:	README.usage
 Patch0:	beep-1.4.12-add-SIGHUP-handling.patch
 Patch1:	beep-1.4.12-drop-Werror.patch
-BuildSystem:	autotools
+BuildRequires:make
 BuildRequires:	kernel-headers
 Requires(pre):	rpm-helper
 Requires(pre):	systemd
