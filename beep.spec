@@ -1,7 +1,7 @@
 Summary:	Beep the PC speaker any number of ways
 Name:		beep
 Version:	1.4.12
-Release:	1
+Release:	2
 License:	GPLv2+
 Group:		Sound
 # Old stuff: http://www.johnath.com/beep/ - Use a more recent fork
@@ -14,8 +14,14 @@ Source4:	beep.sysusers.conf
 Source5:	README.usage
 Patch0:	beep-1.4.12-add-SIGHUP-handling.patch
 Patch1:	beep-1.4.12-drop-Werror.patch
+Patch2:	beep-1.4.12-simplify-driver-branch-structure.patch
+Patch3:	beep-1.4.12-add-status_beeps-contrib-script.patch
+Patch4:	beep-1.4.12-evdev-try-a-list-of-known-devices.patch
+BuildRequires:doxygen
 BuildRequires:make
 BuildRequires:	kernel-headers
+# Not provided yet
+#BuildRequires:pandoc
 Requires(pre):	rpm-helper
 Requires(pre):	systemd
 
@@ -48,6 +54,8 @@ notifying part.
 %autosetup -p1
 
 install -m 0644 %{SOURCE5} .
+
+doxygen -u Doxyfile.in
 
 
 %build

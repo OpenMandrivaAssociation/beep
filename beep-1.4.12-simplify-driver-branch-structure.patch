@@ -1,0 +1,51 @@
+diff -rupN beep-1.4.12.old/beep-driver-console.c beep-1.4.12/beep-driver-console.c
+--- beep-1.4.12.old/beep-driver-console.c	2022-01-28 22:50:48.000000000 +0100
++++ beep-1.4.12/beep-driver-console.c	2026-03-16 10:30:04.542123170 +0100
+@@ -76,11 +76,6 @@ bool driver_detect(beep_driver *driver,
+     if (console_device) {
+         LOG_VERBOSE("driver_detect %p %s",
+                     (void *)driver, console_device);
+-    } else {
+-        LOG_VERBOSE("driver_detect %p %p",
+-                    (void *)driver, (const void *)console_device);
+-    }
+-    if (console_device) {
+         const int fd = open_checked_device(console_device);
+         if (fd >= 0) {
+             driver->device_fd = fd;
+@@ -88,6 +83,10 @@ bool driver_detect(beep_driver *driver,
+             return true;
+         }
+     } else {
++		LOG_VERBOSE("driver_detect %p %p",
++					(void *)driver, (const void *)console_device);
++	
++		
+         /** \todo We could iterate over all `/dev/tty[0-9]+` and
+          *        `/dev/vc/[0-9]+` devices until one is a character
+          *        device special file which can be `open(2)`ed with
+diff -rupN beep-1.4.12.old/beep-driver-evdev.c beep-1.4.12/beep-driver-evdev.c
+--- beep-1.4.12.old/beep-driver-evdev.c	2022-01-28 22:50:48.000000000 +0100
++++ beep-1.4.12/beep-driver-evdev.c	2026-03-16 10:31:04.413017551 +0100
+@@ -73,11 +73,6 @@ bool driver_detect(beep_driver *driver,
+     if (console_device) {
+         LOG_VERBOSE("driver_detect %p %s",
+                     (void *)driver, console_device);
+-    } else {
+-        LOG_VERBOSE("driver_detect %p %p",
+-                    (void *)driver, (const void *)console_device);
+-    }
+-    if (console_device) {
+         const int fd = open_checked_device(console_device);
+         if (fd >= 0) {
+             driver->device_fd = fd;
+@@ -85,6 +80,9 @@ bool driver_detect(beep_driver *driver,
+             return true;
+         }
+     } else {
++		LOG_VERBOSE("driver_detect %p %p",
++					(void *)driver, (const void *)console_device);
++				
+         static
+             const char *const default_name =
+             "/dev/input/by-path/platform-pcspkr-event-spkr";
